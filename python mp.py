@@ -110,7 +110,7 @@ while True:
                 min = aturan[tanaman][p]["min"]
                 max = aturan[tanaman][p]["max"]
                 avg = aturan[tanaman][p]["mean"]
-                rentang = max(mx - mn, 1.0)
+                rentang = max(max - min, 1.0)
 
                 if min <= v <= max:
                     cocok += 1
@@ -148,13 +148,13 @@ while True:
             avg = aturan[target][p]["mean"]
 
             if v < min:
-                status = f"KURANG (-{mn - v:.1f})"
+                status = f"KURANG (-{min - v:.1f})"
             elif v > max:
-                status = f"BERLEBIH (+{v - mx:.1f})"
+                status = f"BERLEBIH (+{v - max:.1f})"
             else:
                 status = "SESUAI"
 
-            print(f"{p:<12} | {v:<7.2f} | {mn:>6.2f} - {mx:<8.2f} | {avg:<7.2f} | {status}")
+            print(f"{p:<12} | {v:<7.2f} | {min:>6.2f} - {max:<8.2f} | {avg:<7.2f} | {status}")
 
     elif pilih == "2":
         print(f"\nKomoditas: {', '.join(komoditas)}")
