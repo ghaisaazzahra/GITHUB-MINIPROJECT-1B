@@ -85,7 +85,9 @@ for tanaman in data:
             "max": max(kumpulan),
             "mean": sum(kumpulan) / len(kumpulan)
         }
-
+print("=" * 65)
+print("SISTEM REKOMENDASI & DIAGNOSIS KESESUAIAN LAHAN PERTANIAN".center(65))
+print("=" * 65)
 print(f"[INFO] Berhasil memuat CSV ({valid} data valid, {invalid} diabaikan, {len(aturan)} tanaman).")
 komoditas = sorted(aturan.keys())
 
