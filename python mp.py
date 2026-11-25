@@ -84,9 +84,9 @@ while True:
         for p in PARAMETER:
             while True:
                 try:
-                    val = float(input(f"Input {p:<12}: ").replace(",", "."))
-                    if val >= 0:
-                        user[p] = val
+                    value = float(input(f"Input {p:<12}: ").replace(",", "."))
+                    if value >= 0:
+                        user[p] = value
                         break
                     print("  [!] Nilai tidak boleh negatif.")
                 except:
@@ -107,16 +107,16 @@ while True:
             cocok = 0
             for p in PARAMETER:
                 v = user[p]
-                mn = aturan[tanaman][p]["min"]
-                mx = aturan[tanaman][p]["max"]
+                min = aturan[tanaman][p]["min"]
+                max = aturan[tanaman][p]["max"]
                 avg = aturan[tanaman][p]["mean"]
                 rentang = max(mx - mn, 1.0)
 
-                if mn <= v <= mx:
+                if min <= v <= max:
                     cocok += 1
                     poin = max(80.0, 100.0 - (abs(v - avg) / (rentang / 2.0)) * 20.0)
                 else:
-                    selisih = (mn - v) if v < mn else (v - mx)
+                    selisih = (min - v) if v < min else (v - max)
                     poin = max(0.0, 80.0 - (selisih / rentang) * 80.0)
 
                 total_poin += poin
@@ -143,13 +143,13 @@ while True:
         print("-" * 65)
         for p in PARAMETER:
             v = user[p]
-            mn = aturan[target][p]["min"]
-            mx = aturan[target][p]["max"]
+            min = aturan[target][p]["min"]
+            max = aturan[target][p]["max"]
             avg = aturan[target][p]["mean"]
 
-            if v < mn:
+            if v < min:
                 status = f"KURANG (-{mn - v:.1f})"
-            elif v > mx:
+            elif v > max:
                 status = f"BERLEBIH (+{v - mx:.1f})"
             else:
                 status = "SESUAI"
