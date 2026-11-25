@@ -74,7 +74,7 @@ komoditas = sorted(aturan.keys())
 
 while True:
     print("\n1. Rekomendasi & Diagnosis")
-    print("2. Cek Batasan Tanaman")
+    print("2. Cek Batasan Acuan Lahan")
     print("3. Keluar")
     pilih = input("Pilih menu: ").strip()
 
@@ -84,7 +84,8 @@ while True:
         for p in PARAMETER:
             while True:
                 try:
-                    value = float(input(f"Input {p:<12}: ").replace(",", "."))
+                    label = "Masukkan Nilai N (80-100 ppm)" if p == "N" else f"Input {p:<12}"
+                    value = float(input(f"{label}: ").replace(",", "."))
                     if value >= 0:
                         user[p] = value
                         break
@@ -107,32 +108,36 @@ while True:
             cocok = 0
             for p in PARAMETER:
                 v = user[p]
-                min = aturan[tanaman][p]["min"]
-                max = aturan[tanaman][p]["max"]
+                nilai_min = aturan[tanaman][p]["min"]
+                nilai_max = aturan[tanaman][p]["max"]
                 avg = aturan[tanaman][p]["mean"]
-                rentang = max(max - min, 1.0)
+                rentang = max(nilai_max - nilai_min, 1.0)
 
-                if min <= v <= max:
+                if nilai_min <= v <= nilai_max:
                     cocok += 1
                     poin = max(80.0, 100.0 - (abs(v - avg) / (rentang / 2.0)) * 20.0)
                 else:
-                    selisih = (min - v) if v < min else (v - max)
+                    selisih = (nilai_min - v) if v < nilai_min else (v - nilai_max)
                     poin = max(0.0, 80.0 - (selisih / rentang) * 80.0)
 
                 total_poin += poin
 
             skor_akhir = total_poin / 7
-            print(f"Skor untuk {tanaman}: {skor_akhir}")
             hasil.append((skor_akhir, tanaman, cocok))
 
         hasil.sort(reverse=True)
-
-        print(f"\n--- TOP {top_n} REKOMENDASI TANAMAN ---")
+        print("\n--- SKOR UNTUK KOMODITAS ---")
+        print(f"{'No':<4} | {'Komoditas':<12} | {'Skor':>10} | Sesuai")
+        print("-" * 45)
+        for no, (skor, tanaman, cocok) in enumerate(hasil, 1):
+            print(f"{no:<4} | {tanaman:<12} | {skor:>10.2f} | {cocok}/7")
+            
+        print(f"\n--- Jumlah Rekomendasi Tanaman Terbaik ---")
         for i in range(top_n):
             skor, tanaman, cocok = hasil[i]
             print(f"{i+1}. {tanaman:<12} | Skor: {skor:6.2f}/100 | Sesuai: {cocok}/7 parameter")
 
-        print(f"\nKomoditas: {', '.join(komoditas)}")
+        print(f"\nPilih komoditas yang ingin didiagnosis: {', '.join(komoditas)}")
         target = input("Pilih tanaman target untuk diagnosis: ").strip().lower()
         while target not in aturan:
             print("  [!] Nama tanaman tidak ditemukan.")
@@ -143,21 +148,21 @@ while True:
         print("-" * 65)
         for p in PARAMETER:
             v = user[p]
-            min = aturan[target][p]["min"]
-            max = aturan[target][p]["max"]
+            nilai_min = aturan[target][p]["min"]
+            nilai_max = aturan[target][p]["max"]
             avg = aturan[target][p]["mean"]
 
-            if v < min:
-                status = f"KURANG (-{min - v:.1f})"
-            elif v > max:
-                status = f"BERLEBIH (+{v - max:.1f})"
+            if v < nilai_min:
+                status = f"KURANG (-{nilai_min - v:.1f})"
+            elif v > nilai_max:
+                status = f"BERLEBIH (+{v - nilai_max:.1f})"
             else:
                 status = "SESUAI"
 
-            print(f"{p:<12} | {v:<7.2f} | {min:>6.2f} - {max:<8.2f} | {avg:<7.2f} | {status}")
-
+            print(f"{p:<12} | {v:<7.2f} | {nilai_min:>6.2f} - {nilai_max:<8.2f} | {avg:<7.2f} | {status}")
+            
     elif pilih == "2":
-        print(f"\nKomoditas: {', '.join(komoditas)}")
+        print(f"\nPilih komoditas yang ingin didiagnosis: {', '.join(komoditas)}")
         target = input("Nama tanaman: ").strip().lower()
         if target in aturan:
             print(f"\n--- BATASAN ACUAN '{target.upper()}' ---")
