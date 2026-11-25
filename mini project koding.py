@@ -29,15 +29,13 @@ try:
                 angka.append(nilai)
 
             baris_cek = (tanaman, tuple(angka))
-
-            # Abaikan jika nama kosong, ada angka minus, atau data duplikat
+            
             if tanaman == "" or min(angka) < 0 or baris_cek in sudah_ada:
                 invalid += 1
                 continue
 
             sudah_ada.append(baris_cek)
 
-            # Buat tempat penyimpanan jika nama tanaman belum ada
             if tanaman not in data:
                 data[tanaman] = {
                     "N": [], "P": [], "K": [],
