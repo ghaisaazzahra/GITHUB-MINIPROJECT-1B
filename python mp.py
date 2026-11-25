@@ -93,7 +93,7 @@ komoditas = sorted(aturan.keys())
 
 while True:
     print("\n1. Rekomendasi & Diagnosis")
-    print("2. Cek Batasan Acuan Lahan")
+    print("2. Cek Batasan Acuan Lahan tanam")
     print("3. Keluar")
     pilih = input("Pilih menu: ").strip()
 
