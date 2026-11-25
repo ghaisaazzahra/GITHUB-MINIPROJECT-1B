@@ -83,8 +83,8 @@ for tanaman in data:
         aturan[tanaman][p] = {
             "min": min(kumpulan),
             "max": max(kumpulan),
-            "mean": sum(kumpulan) / len(kumpulan)
-        }
+            "mean": sum(kumpulan) / len(kumpulan)}
+        
 print("=" * 65)
 print("SISTEM REKOMENDASI & DIAGNOSIS KESESUAIAN LAHAN PERTANIAN".center(65))
 print("=" * 65)
