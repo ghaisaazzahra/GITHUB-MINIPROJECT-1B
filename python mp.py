@@ -3,6 +3,23 @@ import csv
 NAMA_FILE = "Crop_recommendation 2000.csv"
 PARAMETER = ["N", "P", "K", "temperature", "humidity", "ph", "rainfall"]
 
+INFO_INPUT = {
+    "N": "Nitrogen/N (80-150 ppm)",
+    "P": "Fosfor/P (15-35 ppm)",
+    "K": "Kalium/K (60-130 ppm)",
+    "temperature": "Suhu (20-32 °C)",
+    "humidity": "Kelembapan (65-90 %)",
+    "ph": "pH Tanah (5-6,8)",
+    "rainfall": "Curah Hujan (120-300 mm/bulan)"}
+NAMA_TAMPIL = {
+    "N": "Nitrogen (N)",
+    "P": "Fosfor (P)",
+    "K": "Kalium (K)",
+    "temperature": "Suhu",
+    "humidity": "Kelembapan",
+    "ph": "pH",
+    "rainfall": "Curah Hujan"}
+
 data = {}
 sudah_ada = []
 valid = 0
@@ -84,8 +101,7 @@ while True:
         for p in PARAMETER:
             while True:
                 try:
-                    label = "Masukkan Nilai N (80-100 ppm)" if p == "N" else f"Input {p:<12}"
-                    value = float(input(f"{label}: ").replace(",", "."))
+                    value = float(input(f"Masukkan nilai {INFO_INPUT[p]}: ").replace(",", "."))
                     if value >= 0:
                         user[p] = value
                         break
@@ -144,8 +160,8 @@ while True:
             target = input("Pilih tanaman target untuk diagnosis: ").strip().lower()
 
         print(f"\n--- DIAGNOSIS LAHAN UNTUK '{target.upper()}' ---")
-        print(f"{'Parameter':<12} | {'Input':<7} | {'Acuan (Min-Max)':<17} | {'Rata2':<7} | Status")
-        print("-" * 65)
+        print(f"{'Parameter':<14} | {'Input':<7} | {'Acuan (Min-Max)':<17} | {'Rata2':<7} | Status")
+        print("-" * 67)
         for p in PARAMETER:
             v = user[p]
             nilai_min = aturan[target][p]["min"]
@@ -159,7 +175,7 @@ while True:
             else:
                 status = "SESUAI"
 
-            print(f"{p:<12} | {v:<7.2f} | {nilai_min:>6.2f} - {nilai_max:<8.2f} | {avg:<7.2f} | {status}")
+            print(f"{NAMA_TAMPIL[p]:<14} | {v:<7.2f} | {nilai_min:>6.2f} - {nilai_max:<8.2f} | {avg:<7.2f} | {status}")
             
     elif pilih == "2":
         print(f"\nPilih komoditas yang ingin didiagnosis: {', '.join(komoditas)}")
@@ -168,7 +184,7 @@ while True:
             print(f"\n--- BATASAN ACUAN '{target.upper()}' ---")
             for p in PARAMETER:
                 s = aturan[target][p]
-                print(f"{p:<12}: Min={s['min']:6.2f} | Max={s['max']:6.2f} | Rata2={s['mean']:6.2f}")
+                print(f"{NAMA_TAMPIL[p]:<14}: Min={s['min']:6.2f} | Max={s['max']:6.2f} | Rata2={s['mean']:6.2f}")
         else:
             print("  [!] Tanaman tidak ditemukan.")
 
