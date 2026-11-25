@@ -59,11 +59,11 @@ if valid == 0:
     exit()
 
 aturan = {}
-for tan in data:
-    aturan[tan] = {}
+for tanaman in data:
+    aturan[tanaman] = {}
     for p in PARAMETER:
-        kumpulan = data[tan][p]
-        aturan[tan][p] = {
+        kumpulan = data[tanaman][p]
+        aturan[tanaman][p] = {
             "min": min(kumpulan),
             "max": max(kumpulan),
             "mean": sum(kumpulan) / len(kumpulan)
@@ -102,14 +102,14 @@ while True:
                 print("  [!] Masukkan angka bulat yang valid.")
 
         hasil = []
-        for tan in aturan:
+        for tanaman in aturan:
             total_poin = 0
             cocok = 0
             for p in PARAMETER:
                 v = user[p]
-                mn = aturan[tan][p]["min"]
-                mx = aturan[tan][p]["max"]
-                avg = aturan[tan][p]["mean"]
+                mn = aturan[tanaman][p]["min"]
+                mx = aturan[tanaman][p]["max"]
+                avg = aturan[tanaman][p]["mean"]
                 rentang = max(mx - mn, 1.0)
 
                 if mn <= v <= mx:
@@ -122,17 +122,16 @@ while True:
                 total_poin += poin
 
             skor_akhir = total_poin / 7
-            print(f"Skor untuk {tan}: {skor_akhir}")
-            hasil.append((skor_akhir, tan, cocok))
+            print(f"Skor untuk {tanaman}: {skor_akhir}")
+            hasil.append((skor_akhir, tanaman, cocok))
 
         hasil.sort(reverse=True)
 
         print(f"\n--- TOP {top_n} REKOMENDASI TANAMAN ---")
         for i in range(top_n):
-            skor, tan, cocok = hasil[i]
-            print(f"{i+1}. {tan:<12} | Skor: {skor:6.2f}/100 | Sesuai: {cocok}/7 parameter")
+            skor, tanaman, cocok = hasil[i]
+            print(f"{i+1}. {tanaman:<12} | Skor: {skor:6.2f}/100 | Sesuai: {cocok}/7 parameter")
 
-        # Pilih tanaman target untuk diagnosis
         print(f"\nKomoditas: {', '.join(komoditas)}")
         target = input("Pilih tanaman target untuk diagnosis: ").strip().lower()
         while target not in aturan:
