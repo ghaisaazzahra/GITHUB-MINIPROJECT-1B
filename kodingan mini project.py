@@ -3,7 +3,6 @@ import csv
 NAMA_FILE = "Crop_recommendation 2000.csv"
 PARAMETER = ["N", "P", "K", "temperature", "humidity", "ph", "rainfall"]
 
-
 data = {}
 sudah_ada = []
 valid = 0
@@ -29,7 +28,7 @@ try:
                 angka.append(nilai)
 
             baris_cek = (tanaman, tuple(angka))
-            
+
             if tanaman == "" or min(angka) < 0 or baris_cek in sudah_ada:
                 invalid += 1
                 continue
