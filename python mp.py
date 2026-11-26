@@ -23,7 +23,7 @@ NAMA_TAMPIL = {
 data = {}
 sudah_ada = []
 valid = 0
-invalid = 0
+baris_invalid = []
 
 try:
     file = open(NAMA_FILE, mode="r", encoding="utf-8-sig")
@@ -36,37 +36,46 @@ try:
         print("[ERROR] File CSV kosong.")
         exit()
 
-    for row in pembaca:
+    for no_baris, row in enumerate(pembaca, start=2):  
         try:
-            tanaman = row["label"].strip().lower()
-            angka = []
-            for p in PARAMETER:
-                nilai = float(row[p].replace(",", "."))
-                angka.append(nilai)
-
-            baris_cek = (tanaman, tuple(angka))
-
-            if tanaman == "" or min(angka) < 0 or baris_cek in sudah_ada:
-                invalid += 1
+            tanaman = (row["label"] or "").strip().lower()
+            if tanaman == "":
+                baris_invalid.append((no_baris, "label kosong"))
                 continue
 
+            angka = []
+            salah = False
+            for p in PARAMETER:
+                mentah = row[p]
+                if mentah is None or mentah.strip() == "":
+                    baris_invalid.append((no_baris, f"{p} kosong/tidak lengkap"))
+                    salah = True
+                    break
+                nilai = float(mentah.replace(",", "."))
+                if nilai < 0:
+                    baris_invalid.append((no_baris, f"{p} negatif"))
+                    salah = True
+                    break
+                angka.append(nilai)
+            if salah:
+                continue
+
+            baris_cek = (tanaman, tuple(angka))
+            if baris_cek in sudah_ada:
+                baris_invalid.append((no_baris, "data duplikat"))
+                continue
             sudah_ada.append(baris_cek)
 
             if tanaman not in data:
-                data[tanaman] = {
-                    "N": [], "P": [], "K": [],
-                    "temperature": [], "humidity": [], "ph": [], "rainfall": []
-                }
-                
+                data[tanaman] = {p: [] for p in PARAMETER}
             for i in range(7):
-                p = PARAMETER[i]
-                data[tanaman][p].append(angka[i])
+                data[tanaman][PARAMETER[i]].append(angka[i])
 
             valid += 1
-        except:
-            invalid += 1
-
+        except ValueError:
+            baris_invalid.append((no_baris, f"{p} bukan angka"))
     file.close()
+
 except FileNotFoundError:
     print(f"[ERROR] File '{NAMA_FILE}' tidak ditemukan!")
     exit()
@@ -88,7 +97,13 @@ for tanaman in data:
 print("=" * 65)
 print("SISTEM REKOMENDASI & DIAGNOSIS KESESUAIAN LAHAN PERTANIAN".center(65))
 print("=" * 65)
-print(f"[INFO] Berhasil memuat CSV ({valid} data valid, {invalid} diabaikan, {len(aturan)} tanaman).")
+invalid = len(baris_invalid)
+print(f"[INFO] Berhasil memuat CSV ({valid} data valid, {invalid} tidak valid, {len(aturan)} tanaman).")
+
+if invalid > 0:
+    print("[PERINGATAN] Data tidak valid ditemukan pada baris:")
+    for no_baris, alasan in baris_invalid:
+        print(f"  - Baris ke-{no_baris}: {alasan}")
 komoditas = sorted(aturan.keys())
 
 while True:
