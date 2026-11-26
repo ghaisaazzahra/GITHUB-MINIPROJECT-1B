@@ -9,7 +9,7 @@
 ## Deskripsi Proyek
 Pemilihan jenis tanaman yang kurang sesuai dengan kondisi unsur hara tanah dan iklim berisiko membuat pertumbuhan tanaman tidak optimal. Program berbasis Python ini dirancang untuk membantu petani, mahasiswa, dan pengelola lahan dalam mengevaluasi kesesuaian lahan secara terstruktur dan praktis. 
 
-Program ini memiliki dua fungsi utama berbasis aturan (*rule-based*):
+Program ini memiliki dua fungsi utama berbasis aturan (*rule based*):
 1. **Rekomendasi Komoditas:** Menghitung skor kecocokan (0–100) berdasarkan selisih dan rentang historis (`min`, `mean`, `max`) dari dataset untuk menampilkan peringkat tanaman yang paling sesuai.
 2. **Diagnosis Parameter Lahan:** Menganalisis setiap parameter tanah dan iklim pengguna terhadap komoditas target pilihan untuk menentukan status kesesuaiannya (**Kurang**, **Sesuai**, atau **Berlebih**) beserta selisih nilainya.
 
