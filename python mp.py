@@ -207,12 +207,14 @@ while True:
         target = input("Nama tanaman: ").strip().lower()
         if target in aturan:
             print(f"\n--- BATASAN ACUAN '{target.upper()}' ---")
-            s = aturan[target][p]
-            if s["n"] == 1 
+            for p in PARAMETER:
+                s = aturan[target][p]
+                if s["n"] == 1 
                     print(f"{NAMA_TAMPIL[p]:<14}: Min={s['min']:6.2f}")
+                elif ["n"] >= 1:
+                     print(f"{NAMA_TAMPIL[p]:<14}: Min={s['min']:6.2f} | Max={s['max']:6.2f} | Rata2={s['mean']:6.2f}")
         else:
-             print(f"{NAMA_TAMPIL[p]:<14}: Min={s['min']:6.2f} | Max={s['max']:6.2f} | Rata2={s['mean']:6.2f}")
-        print("  [!] Tanaman tidak ditemukan.")
+            print("  [!] Tanaman tidak ditemukan.")
 
     elif pilih == "3":
         break
