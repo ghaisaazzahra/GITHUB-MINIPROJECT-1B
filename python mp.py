@@ -36,7 +36,12 @@ try:
         print("[ERROR] File CSV kosong.")
         exit()
 
-    for no_baris, row in enumerate(pembaca, start=2):  
+   baris_terakhir = 1  
+    for row in pembaca:
+        no_baris = pembaca.line_num
+        for b in range(baris_terakhir + 1, no_baris):
+            baris_invalid.append((b, "baris kosong"))
+        baris_terakhir = no_baris
         try:
             tanaman = (row["label"] or "").strip().lower()
             if tanaman == "":
@@ -75,6 +80,8 @@ try:
         except ValueError:
             baris_invalid.append((no_baris, f"{p} bukan angka"))
     file.close()
+    for b in range(baris_terakhir + 1, pembaca.line_num + 1):
+        baris_invalid.append((b, "baris kosong"))
 
 except FileNotFoundError:
     print(f"[ERROR] File '{NAMA_FILE}' tidak ditemukan!")
@@ -92,7 +99,8 @@ for tanaman in data:
         aturan[tanaman][p] = {
             "min": min(kumpulan),
             "max": max(kumpulan),
-            "mean": sum(kumpulan) / len(kumpulan)}
+            "mean": sum(kumpulan) / len(kumpulan)
+            "n": len(kumpulan)}
         
 print("=" * 65)
 print("SISTEM REKOMENDASI & DIAGNOSIS KESESUAIAN LAHAN PERTANIAN".center(65))
@@ -199,11 +207,12 @@ while True:
         target = input("Nama tanaman: ").strip().lower()
         if target in aturan:
             print(f"\n--- BATASAN ACUAN '{target.upper()}' ---")
-            for p in PARAMETER:
-                s = aturan[target][p]
-                print(f"{NAMA_TAMPIL[p]:<14}: Min={s['min']:6.2f} | Max={s['max']:6.2f} | Rata2={s['mean']:6.2f}")
+            s = aturan[target][p]
+            if s["n"] == 1 
+                    print(f"{NAMA_TAMPIL[p]:<14}: Min={s['min']:6.2f}")
         else:
-            print("  [!] Tanaman tidak ditemukan.")
+             print(f"{NAMA_TAMPIL[p]:<14}: Min={s['min']:6.2f} | Max={s['max']:6.2f} | Rata2={s['mean']:6.2f}")
+        print("  [!] Tanaman tidak ditemukan.")
 
     elif pilih == "3":
         break
