@@ -4,12 +4,12 @@ NAMA_FILE = "Crop_recommendation 2000.csv"
 PARAMETER = ["N", "P", "K", "temperature", "humidity", "ph", "rainfall"]
 
 INFO_INPUT = {
-    "N": "Nitrogen/N (80-150 ppm)",
-    "P": "Fosfor/P (15-35 ppm)",
-    "K": "Kalium/K (60-130 ppm)",
-    "temperature": "Suhu (20-32 °C)",
-    "humidity": "Kelembapan (65-90 %)",
-    "ph": "pH Tanah (5-6,8)",
+    "N": "Nitrogen/N (0-140 ppm)",
+    "P": "Fosfor/P (5-145 ppm)",
+    "K": "Kalium/K (5-205 ppm)",
+    "temperature": "Suhu (8,83-43,68 °C)",
+    "humidity": "Kelembapan (14,26-99,98 %)",
+    "ph": "pH Tanah (20,21-298,56)",
     "rainfall": "Curah Hujan (120-300 mm/bulan)"}
 NAMA_TAMPIL = {
     "N": "Nitrogen (N)",
@@ -143,12 +143,12 @@ while True:
                 v = user[p]
                 nilai_min = aturan[tanaman][p]["min"]
                 nilai_max = aturan[tanaman][p]["max"]
-                avg = aturan[tanaman][p]["mean"]
+                average = aturan[tanaman][p]["mean"]
                 rentang = max(nilai_max - nilai_min, 1.0)
 
                 if nilai_min <= v <= nilai_max:
                     cocok += 1
-                    poin = max(80.0, 100.0 - (abs(v - avg) / (rentang / 2.0)) * 20.0)
+                    poin = max(80.0, 100.0 - (abs(v - average) / (rentang / 2.0)) * 20.0)
                 else:
                     selisih = (nilai_min - v) if v < nilai_min else (v - nilai_max)
                     poin = max(0.0, 80.0 - (selisih / rentang) * 80.0)
@@ -183,7 +183,7 @@ while True:
             v = user[p]
             nilai_min = aturan[target][p]["min"]
             nilai_max = aturan[target][p]["max"]
-            avg = aturan[target][p]["mean"]
+            average = aturan[target][p]["mean"]
 
             if v < nilai_min:
                 status = f"KURANG (-{nilai_min - v:.1f})"
@@ -192,7 +192,7 @@ while True:
             else:
                 status = "SESUAI"
 
-            print(f"{NAMA_TAMPIL[p]:<14} | {v:<7.2f} | {nilai_min:>6.2f} - {nilai_max:<8.2f} | {avg:<7.2f} | {status}")
+            print(f"{NAMA_TAMPIL[p]:<14} | {v:<7.2f} | {nilai_min:>6.2f} - {nilai_max:<8.2f} | {average:<7.2f} | {status}")
             
     elif pilih == "2":
         print(f"\nPilih komoditas yang ingin didiagnosis: {', '.join(komoditas)}")
